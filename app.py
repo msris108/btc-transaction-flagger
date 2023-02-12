@@ -54,8 +54,10 @@ if txhash:
 		# pca = joblib.load('pca.joblib')
 		pca = pickle.load(open('pca.pkl', 'rb'))
 		x = pca.transform(np.array([[indegree, outdegree, in_btc, out_btc, total_btc, mean_in_btc, mean_out_btc]]))
-		rfc = pickle.load(open('rfc.pkl', 'rb'))
-		pred = rfc.predict(x)
+		# rfc = pickle.load(open('rfc.pkl', 'rb'))
+		xgb = xgb.XGBClassifier()
+		xgb.load_model('xgb.json')
+		pred = xgb.predict(x)
 
 		df.reset_index(drop=True, inplace=True)
 
