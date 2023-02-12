@@ -4,7 +4,7 @@ import json
 import joblib
 import numpy as np
 import pandas as pd
-import xgboost as xgb
+# import xgboost as xgb
 import pickle
 
 st.write("""
