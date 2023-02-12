@@ -3,7 +3,9 @@ import requests
 import json
 import joblib
 import numpy as np
-import pandas as pd 
+import pandas as pd
+import xgboost as xgb
+import pickle
 
 st.write("""
 	# Bitcoin Transaction Classifier
@@ -11,7 +13,7 @@ st.write("""
 """)
 
 
-txhash = st.text_input('') 
+txhash = st.text_input('')
 
 if txhash:
 	# st.write(txn)
@@ -47,21 +49,22 @@ if txhash:
 		mean_out_btc = out_btc/outdegree
 
 		df = pd.DataFrame(np.array([[indegree, outdegree, in_btc, out_btc, total_btc]]), columns=['In Degree', 'Out Degree', 'In BTC', 'Out BTC', 'Total BTC'])
-		
-		pca = joblib.load('pca.joblib')
+
+		# pca = joblib.load('pca.joblib')
+		pca = pickle.load(open('pca.pkl', 'rb'))
 		x = pca.transform(np.array([[indegree, outdegree, in_btc, out_btc, total_btc, mean_in_btc, mean_out_btc]]))
-		rfc = joblib.load('RandomForestClassifier.joblib') 
+		rfc = joblib.load('RandomForestClassifier.joblib')
 		pred = rfc.predict(x)
 
 		df.reset_index(drop=True, inplace=True)
-		
+
 		if pred == 0:
 			st.write(df)
 			st.write('### Safe Transaction ✅')
 		else:
 			st.write(df)
 			st.write('### Illicit Transaction ❌')
-	
+
 	else:
 		st.write('### ❌ Invalid Address')
 		st.write(dataJson)
@@ -69,7 +72,7 @@ if txhash:
 
 
 
-# Normal 
+# Normal
 # 0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9
 # f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16
 # ea44e97271691990157559d0bdd9959e02790c34db6c006d779e82fa5aee708e
@@ -116,4 +119,3 @@ if txhash:
 # b3a91e53d6c1cbc14d3cf76ba3ed5e4764435e9f9973842dac18c5ac62438e93
 # d28a40ea743d114f9e9aaedc40278589eceb943979dfa136490811552aa8a1f6
 # 693fc4d3048de003349045a08958ae714785b52f6f7ad326127c937bb6c3f75f
-
