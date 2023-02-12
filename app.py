@@ -1,11 +1,12 @@
-import streamlit as st
 import requests
 import json
 import joblib
+import pickle
+import sklearn
 import numpy as np
 import pandas as pd
-# import xgboost as xgb
-import pickle
+import xgboost as xgb
+import streamlit as st
 
 st.write("""
 	# Bitcoin Transaction Classifier
